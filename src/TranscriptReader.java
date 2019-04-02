@@ -14,10 +14,6 @@ public class TranscriptReader {
 	private List<String[]> rawList = new ArrayList<>();  //courseNum and CourseTitle
 	private List<String[]> transcript;	
 	
-//	public String getCohort() { //get cohort from the directory file name from directoryPath
-//		
-//		return cohort;				ex: EE2014?
-//	}
 	
 	public TranscriptReader(String dirPath) {
 		this.directoryPath = dirPath;

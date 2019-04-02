@@ -4,13 +4,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class RawWriter {
-	private static final String FILE_NAME1 = "results_EE2015.xlsx";
-	private static final String FILE_NAME2 = "results_EE2014.xlsx";
+	private static final String FILE_NAME2 = "rawList.xlsx";
+	private static 	XSSFWorkbook workbook1 = new XSSFWorkbook();
 	
 	public static void writeRawList(List<String[]> rawList) {
 		XSSFWorkbook workbook = new XSSFWorkbook();
@@ -47,14 +49,21 @@ public class RawWriter {
 	}
 	
 	public static void writeRawDist(List<Course> courseList) {
-		XSSFWorkbook workbook = new XSSFWorkbook();
-		XSSFSheet rawSheet = workbook.createSheet("RAW");
+		// Creating font and style for top row 
+        CellStyle style = workbook1.createCellStyle();
+        XSSFFont font = workbook1.createFont();
+        font.setBold(true);
+        style.setFont(font);
+        
+		XSSFSheet rawSheet = workbook1.createSheet("RAW");
+		int numColumns = 24;
 
-		String[] topRowTypes = {"Course", "Other", "fails", "marginal", "meets", "exceeds"};
+		String[] topRowTypes = {"Course", "Other", "Fails", "Marginal", "Meets", "Exceeds"};
         Row topRow = rawSheet.createRow(0);
         for (int i = 0; i < topRowTypes.length; i++) {
         	Cell cell = topRow.createCell(i);
         	cell.setCellValue(topRowTypes[i]);
+        	cell.setCellStyle(style);
         }
 
         int count = topRowTypes.length + 1;
@@ -62,6 +71,7 @@ public class RawWriter {
         for (int i = count; i < count + topRowTypes2.length; i++) {
         	Cell cell = topRow.createCell(i);
         	cell.setCellValue(topRowTypes2[i - count]);
+        	cell.setCellStyle(style);
         }
 
         count = count + topRowTypes2.length + 1;
@@ -69,6 +79,7 @@ public class RawWriter {
         for (int i = count; i < count + topRowTypes3.length; i++) {
         	Cell cell = topRow.createCell(i);
         	cell.setCellValue(topRowTypes3[i - count]);
+        	cell.setCellStyle(style);
         }
 
         count = count + topRowTypes3.length + 1;
@@ -76,6 +87,7 @@ public class RawWriter {
         for (int i = count; i < count + topRowTypes4.length; i++) {
         	Cell cell = topRow.createCell(i);
         	cell.setCellValue(topRowTypes4[i - count]);
+        	cell.setCellStyle(style);
         }
 
         count = count + topRowTypes4.length + 1;
@@ -83,8 +95,8 @@ public class RawWriter {
         for (int i = count; i < count + topRowTypes5.length; i++) {
         	Cell cell = topRow.createCell(i);
         	cell.setCellValue(topRowTypes5[i - count]);
+        	cell.setCellStyle(style);
         }
-
 
         int rowNum = 1;
         for (Course course : courseList) {
@@ -130,19 +142,17 @@ public class RawWriter {
         	Cell cell24 = row.createCell(24);
         	cell24.setCellValue((Integer) course.getNumSemester("SP"));
         }
-
-		try {
-	       	FileOutputStream outputStream = new FileOutputStream(FILE_NAME1);
-	       	workbook.write(outputStream);
-	       	outputStream.close();
-	       	workbook.close();
-	    } catch (FileNotFoundException e) {
-	       	e.printStackTrace();
-	    } catch (IOException e) {
-	       	e.printStackTrace();
-	    }
-
+        
+        // Formatting column width
+        for(int i=0;i<numColumns;i++) {
+        	rawSheet.autoSizeColumn(i);
+        }
+        
         System.out.println("Done2");
-
 	}
+	
+	public static XSSFWorkbook getWorkbook() {
+		return workbook1;
+	}
+	
 }
