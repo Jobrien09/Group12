@@ -53,8 +53,6 @@ public class AreaList {
 						Course course = it2.next();
 						if (course.getName().equals(cellValue)) {
 							addToLists(rowI, course);
-							it2.remove();	
-							break;
 						}
 					}
 					checkNotSpecified(courseList);	
