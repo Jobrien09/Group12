@@ -63,6 +63,7 @@ public class Course {
 			case "F":	numF++; break;
 			case "AUD":	numO++; break;					//provide way to count non-standard grades //ignore nonstarndard grades
 			case "CTN": numO++; break;
+			case "W": numO++; break;
 			default :	System.out.println("Grade not within range");
 		}
 	}
@@ -76,6 +77,7 @@ public class Course {
 			case "F":	numF--; break;
 			case "AUD":	numO--; break;
 			case "CTN": numO--; break;
+			case "W": numO--; break;
 			default :	System.out.println("Grade not within range2");
 		}
 	}
@@ -90,6 +92,8 @@ public class Course {
 			case "F":	num = numF; break;
 			case "AUD":	num = numO; break;
 			case "CTN": num = numO; break;
+			case "W": num = numO; break;
+			case "O": num = numO; break;
 			default :	System.out.println("Grade not within range3");
 						return -1;
 		}

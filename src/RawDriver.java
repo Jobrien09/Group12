@@ -8,8 +8,7 @@ public class RawDriver {
 		RawWriter.writeRawDist(courseList);
 		List<String[]> rawList = tr.getRawList();
 		RawWriter.writeRawList(rawList);
-		AreaWriter.writeAreaDist();
+		AreaWriter.writeAreaDist(courseList);
 		Writer.writeOutput();
 	}
-
 }
