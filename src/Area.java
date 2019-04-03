@@ -10,7 +10,7 @@ public class Area {
 	private int numD;
 	private int numF;
 	private int numO;
-
+	
 	public Area(String name, AreaList a) {
 		this.name = name;
 		areaList = a.getList(name);
@@ -26,19 +26,19 @@ public class Area {
 			numAp += course.getNumGrades("A+");
 			numA += course.getNumGrades("A");
 			numAm += course.getNumGrades("A-");
-			numBm += course.getNumGrades("B-");
+			numBp += course.getNumGrades("B+");
 			numB += course.getNumGrades("B");
 			numBm += course.getNumGrades("B-");
-			numCm += course.getNumGrades("C-");
+			numCp += course.getNumGrades("C+");
 			numC += course.getNumGrades("C");
 			numCm += course.getNumGrades("C-");
 			numD += course.getNumGrades("D");
 			numF += course.getNumGrades("F");
 			numO += course.getNumGrades("O");
 		}
-		//System.out.println(name);
-		//System.out.println(areaList.size());
-		//System.out.println();
+		System.out.println(name);
+		System.out.println(areaList.size());
+		System.out.println();
 	}
 	
 	public int getNumGrades(String grade) {
