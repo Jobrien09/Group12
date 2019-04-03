@@ -105,16 +105,19 @@ public class RawWriter {
         	Cell cell0 = row.createCell(0);
         	cell0.setCellValue((String) course.getName());
 
+        	
         	Cell cell1 = row.createCell(1);
-        	cell1.setCellValue((Integer) (course.getNumGrades("CTN") + course.getNumGrades("AUD"))); //achievement
+        	cell1.setCellValue((Integer) course.getNumGrades("O")); //achievement
         	Cell cell2 = row.createCell(2);
-        	cell2.setCellValue((Integer) (course.getNumGrades("F") + course.getNumGrades("D")));
+        	cell2.setCellValue(course.getNumAchievement("Fails"));
         	Cell cell3 = row.createCell(3);
-        	cell3.setCellValue((Integer) course.getNumGrades("C"));
+        	cell3.setCellValue(course.getNumAchievement("Marginal"));
         	Cell cell4 = row.createCell(4);
-        	cell4.setCellValue((Integer) course.getNumGrades("B"));
+        	cell4.setCellValue(course.getNumAchievement("Meets"));
         	Cell cell5 = row.createCell(5);
-        	cell5.setCellValue((Integer) course.getNumGrades("A"));
+        	cell5.setCellValue(course.getNumAchievement("Exceeds"));
+        	
+        	
         	Cell cell7 = row.createCell(7);								//grade
         	cell7.setCellValue((Integer) course.getNumGrades("F"));
         	Cell cell8 = row.createCell(8);

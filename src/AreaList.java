@@ -24,7 +24,7 @@ public class AreaList {
 	private List<Course> society = new ArrayList<>();
 	private List<Course> notspecified = new ArrayList<>();
 	
-	private static final String SAMPLE = "results_EE2014.xlsx";
+	private static final String SAMPLE = "config.xlsx";
 
 	public void createAreaLists(List<Course> courseList) {
 		try {

@@ -45,7 +45,7 @@ public class AreaWriter {
             Cell cell1 = column.createCell(1);
             cell1.setCellValue((Integer) areaLists.get(i).getNumAchievement("Other"));
             Cell cell2 = column.createCell(2);
-            cell2.setCellValue((Integer) areaLists.get(i).getNumAchievement("Fail"));
+            cell2.setCellValue((Integer) areaLists.get(i).getNumAchievement("Fails"));
             Cell cell3 = column.createCell(3);
             cell3.setCellValue((Integer) areaLists.get(i).getNumAchievement("Marginal"));
             Cell cell4 = column.createCell(4);

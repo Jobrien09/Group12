@@ -2,6 +2,7 @@ import java.util.List;
 public class RawDriver {
 
 	public static void main(String[] args) {
+		Schema.getSchemas();
 		TranscriptReader tr = new TranscriptReader("\\Users\\Deon\\Documents\\transcripts");
 		tr.createLists();
 		List<Course> courseList = tr.getCourseList();
