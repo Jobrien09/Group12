@@ -10,6 +10,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ public class AreaList {
 	private List<Course> core = new ArrayList<>();
 	private List<Course> cse = new ArrayList<>();
 	private List<Course> society = new ArrayList<>();
+	private List<Course> specified = new ArrayList<>();
 	private List<Course> notspecified = new ArrayList<>();
 	
 	private static final String SAMPLE = "config.xlsx";
@@ -29,8 +31,13 @@ public class AreaList {
 	public void createAreaLists(List<Course> courseList) {
 		try {
 			FileInputStream excelFile = new FileInputStream(new File(SAMPLE));
-			Workbook workbook = new XSSFWorkbook(excelFile);
+			XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 			Sheet sheet = workbook.getSheetAt(3);
+			
+			/**Row row1 = sheet.createRow(1);
+			Cell cell1 = row1.createCell(9);
+			cell1.setCellValue("Blah");**/
+			
 			DataFormatter dataFormatter = new DataFormatter();
 			
 			Iterator<Row> it = sheet.iterator();
@@ -53,13 +60,18 @@ public class AreaList {
 						Course course = it2.next();
 						if (course.getName().equals(cellValue)) {
 							addToLists(rowI, course);
+							specified.add(course);
 						}
 					}
-					checkNotSpecified(courseList);	
 				}
-				//System.out.println();
-			}	
+			}
+			excelFile.close();
+			checkNotSpecified(courseList);
+			writeNotSpecified(workbook, sheet);
+	       	FileOutputStream outputStream = new FileOutputStream(SAMPLE);
+	       	workbook.write(outputStream);
 			workbook.close();
+			outputStream.close();
 			
 		} catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -69,11 +81,16 @@ public class AreaList {
 	}	
 	
 	private void checkNotSpecified(List<Course> courseList) {
-		if (!courseList.isEmpty()) {
-			for (Course course : courseList) {
-				notspecified.add(course);
+		for(int i=0;i<courseList.size();i++) {
+			for(int j=0;j<specified.size();j++) {
+				if(courseList.get(i) == specified.get(j)) {
+					break;
+				}
+				if(j == specified.size()-1) {
+					notspecified.add(courseList.get(i));
+				}
 			}
-		}	
+		}
 	}
 	
 	private void addToLists(int rowI, Course course) {
@@ -103,5 +120,15 @@ public class AreaList {
 			default : System.out.println("No such area");
 		}
 		return area;
+	}
+	
+	public void writeNotSpecified(XSSFWorkbook workbook, Sheet sheet) {
+		int rowNum = 1;
+		int columnNum = 9;
+		for(int i=0;i<notspecified.size();i++) {
+			Cell cell = sheet.getRow(rowNum).createCell(columnNum);
+			cell.setCellValue(notspecified.get(i).getName());
+			rowNum++;
+		}
 	}
 }
