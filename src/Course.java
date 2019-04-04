@@ -1,13 +1,19 @@
+package test;
+
 public class Course {
 	private String courseNum;
 
-	private int numA;		//A+ a- don't need
-	private int numB;
-	private int numC;
+	private int numA, numAm, numAp;	
+	private int numB, numBm, numBp;
+	private int numC, numCm, numCp;
 	private int numD;
 	private int numF;
-	private int numAUD;
-	private int numCTN;
+	private int numO;
+	
+	private int freshman;				//low priority
+	private int sophomore;
+	private int junior;
+	private int senior;
 
 	private int numSJ;
 	private int numFR;
@@ -57,14 +63,21 @@ public class Course {
 	
 	private void incrementNumGrade(String grade) {
 		switch (grade) {
-			case "A+": case "A": case "A-":	numA++; break;
-			case "B+": case "B": case "B-":	numB++; break;
-			case "C+": case "C": case "C-":	numC++; break;
+			case "A+": 	numAp++; break;
+			case "A": 	numA++; break;
+			case "A-":	numAm++; break;
+			case "B+": 	numBp++; break;
+			case "B": 	numB++; break;
+			case "B-":	numBm++; break;
+			case "C+": 	numCp++; break;
+			case "C": 	numC++; break;
+			case "C-":	numCm++; break;
 			case "D":	numD++; break;
 			case "F":	numF++; break;
-			case "AUD":	numAUD++; break;					//provide way to count non-standard grades //ignore nonstarndard grades
-			case "CTN": numCTN++; break;
-			default :	System.out.println("Grade not within range");
+			case "AUD":	numO++; break;					
+			case "CTN": numO++; break;
+			case "W": numO++; break;
+			default : numO++;
 		}
 	}
 
@@ -75,24 +88,32 @@ public class Course {
 			case "C+": case "C": case "C-":	numC--; break;
 			case "D":	numD--;	break;
 			case "F":	numF--; break;
-			case "AUD":	numAUD--; break;
-			case "CTN": numCTN--; break;
-			default :	System.out.println("Grade not within range2");
+			case "AUD":	numO--; break;
+			case "CTN": numO--; break;
+			case "W": numO--; break;
+			default : numO--;
 		}
 	}
 
 	public int getNumGrades(String grade) {
 		int num = 0;
 		switch (grade) {
+			case "A+":	num = numAp; break;
 			case "A":	num = numA; break;
+			case "A-":	num = numAm; break;
+			case "B+":	num = numBp; break;
 			case "B":	num = numB; break;
+			case "B-":	num = numBm; break;
+			case "C+":	num = numCp; break;
 			case "C":	num = numC; break;
+			case "C-":	num = numCm; break;
 			case "D":	num = numD; break;
 			case "F":	num = numF; break;
-			case "AUD":	num = numAUD; break;
-			case "CTN": num = numCTN; break;
-			default :	System.out.println("Grade not within range3");
-						return -1;
+			case "AUD":	num = numO; break;
+			case "CTN": num = numO; break;
+			case "W": num = numO; break;
+			case "O": num = numO; break;
+			default : num = numO;
 		}
 		return num;
 	}
@@ -101,7 +122,7 @@ public class Course {
 		switch(campus) {
 			case "SJ": numSJ++; break;
 			case "FR": numFR++; break;
-			default: System.out.println("The campus does not exist");
+			default: System.out.println("The campus is not UNB");
 		}
 	}
 	
@@ -109,7 +130,7 @@ public class Course {
 		switch(campus) {
 			case "SJ": numSJ--; break;
 			case "FR": numFR--; break;
-			default: System.out.println("The campus does not exist2");
+			default: System.out.println("The campus is not UNB 2");
 		}
 	}
 
@@ -118,7 +139,7 @@ public class Course {
 		switch(campus) {
 			case "SJ": num = numSJ; break;
 			case "FR": num = numFR; break;
-			default: System.out.println("The campus does not exist");
+			default: System.out.println("The campus is not UNB");
 					 return -1;
 		}
 		return num;
@@ -130,7 +151,7 @@ public class Course {
 			case "SM": numSM++; break;
 			case "FA": numFA++; break;
 			case "WI": numWI++; break;
-			default: System.out.println("The semester does not exist");
+			default: System.out.println("The semester does not exist1");
 		}
 	}
 	
@@ -140,7 +161,7 @@ public class Course {
 			case "SM": numSM--; break;
 			case "FA": numFA--; break;
 			case "WI": numWI--; break;
-			default: System.out.println("The semester does not exist");
+			default: System.out.println("The semester does not exist2");
 		}
 	}
 
@@ -157,19 +178,43 @@ public class Course {
 		return num;
 	}
 
-	public int getNumAchievement(String level) {
-		int num = 0; 									//assume default schema
-		switch (level) {								//should read achievement schema from excel
-			case "Exceeds": num = getNumGrades("A"); break;	//maybe another method to read in the schema
-			case "Meets": num = getNumGrades("B"); break;
-			case "Marginal": num = getNumGrades("C"); break;
-			case "Fail": num = getNumGrades("D") + getNumGrades("F"); break;
-			case "Other" : num = getNumGrades("AUD") + getNumGrades("CTN"); break;
+	public int getNumAchievement(String level/**Schema schema**/) {
+		int num = 0;
+		int i = 0;
+		int[] arrayGrades = new int[] {numAp,numA,numAm,numBp,numB,numBm,numCp,numC,numCm,numD,numF};
+		int exceeds = Schema.getExceeds();
+		int meets = Schema.getMeets();
+		int marginal = Schema.getMarginal();
+		
+		switch (level) {
+			case "Exceeds": while(i<=exceeds) {
+								num += arrayGrades[i];
+								i++;
+							} break;
+			
+			case "Meets": i = exceeds+1;
+						  while(i<=meets) {
+							  num += arrayGrades[i];
+							  i++;
+						  } break;
+			
+			case "Marginal": i = meets+1;
+							while(i<=marginal) {
+								num += arrayGrades[i];
+								i++;
+							} break;
+			
+			case "Fails": i = marginal+1;
+							 while(i<arrayGrades.length) {
+								 num += arrayGrades[i];
+								 i++;
+							 } break;
 			default: System.out.println("level not available");
 					 return -1;
 		}
 		return num;
 	}
+	
 	private static int compareGrades(String grade1, String grade2) {
 		int g1, g2;	//ASCII
 		int index = 0;												//1 = grade1 higher, 0 = same, -1 = grade2 higher
