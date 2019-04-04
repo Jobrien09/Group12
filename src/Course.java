@@ -267,4 +267,8 @@ public class Course {
 		}
 		return 0;
 	}
+	
+	public void setName(String name) {
+		courseNum = name;
+	}
 }

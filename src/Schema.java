@@ -16,7 +16,6 @@ public class Schema {
 	private static String exceeds = "A-";
 	private static String meets = "B-";
 	private static String marginal = "C";
-	private static String fails = "F";
 	private static int freshman;
 	private static int sophomore;
 	private static int junior;
@@ -42,8 +41,6 @@ public class Schema {
 			meets = dataFormatter.formatCellValue(cell2);
 			Cell cell3 = sheet.getRow(3).getCell(1);
 			marginal = dataFormatter.formatCellValue(cell3);
-			Cell cell4 = sheet.getRow(4).getCell(1);
-			fails = dataFormatter.formatCellValue(cell4);
 			
 			//System.out.println("E = " + exceeds + " M = " + meets + " M = " + marginal + " F = " + fails);
 			

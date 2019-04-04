@@ -8,16 +8,16 @@ import java.io.FileNotFoundException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class EquivalenceReader implements XLSXReader<String[], String[]>{
+public class EquivalenceReader{
 
-	private String fileName;
+	private static String fileName;
 	
 	public EquivalenceReader(String fileName) {
 		this.fileName = fileName;
 	}
 	
 	//reads Equivalence tab and change any course number that exists in the tab to master course number
-	public List<String[]> read(List<String[]> rawList) {
+	public static List<Course> read(List<Course> courseList) {
 		try {
 			FileInputStream excelFile = new FileInputStream(new File(fileName));
 			Workbook workbook = new XSSFWorkbook(excelFile);
@@ -37,7 +37,7 @@ public class EquivalenceReader implements XLSXReader<String[], String[]>{
 						firstRow++;
 						continue;
 					}
-					changeCourseNum(rawList, cellValue, masterCourseNum);			
+					changeCourseNum(courseList, cellValue, masterCourseNum);			
 				}
 			}
 			workbook.close();
@@ -46,14 +46,14 @@ public class EquivalenceReader implements XLSXReader<String[], String[]>{
         } catch (IOException e) {
             e.printStackTrace();
         }
-		return rawList;
+		return courseList;
 	}
 	
-	private void changeCourseNum(List<String[]> rawList, String courseNum, String masterCourseNum) {
-		for (String[] course : rawList) {
-			String cNum = course[0];
+	private static void changeCourseNum(List<Course> courseList, String courseNum, String masterCourseNum) {
+		for (Course course : courseList) {
+			String cNum = course.getName();
 			if (cNum.equals(courseNum)) {
-				cNum = masterCourseNum;
+				
 				break;
 			}
 		}	

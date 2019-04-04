@@ -93,4 +93,8 @@ public class Area {
 		}
 		return num;
 	}	
+	
+	public List<Course> getList(){
+		return list;
+	}
 }
