@@ -36,9 +36,6 @@ public class Area {
 			numF += course.getNumGrades("F");
 			numO += course.getNumGrades("O");
 		}
-		System.out.println(name);
-		System.out.println(areaList.size());
-		System.out.println();
 	}
 	
 	public int getNumGrades(String grade) {
@@ -59,8 +56,7 @@ public class Area {
 			case "CTN": num = numO; break;
 			case "W": num = numO; break;
 			case "O": num = numO; break;
-			default :	System.out.println("Grade not within range3");
-						return -1;
+			default : num = numO;
 		}
 		return num;
 	}

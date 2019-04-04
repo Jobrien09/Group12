@@ -34,10 +34,6 @@ public class AreaList {
 			XSSFWorkbook workbook = new XSSFWorkbook(excelFile);
 			Sheet sheet = workbook.getSheetAt(3);
 			
-			/**Row row1 = sheet.createRow(1);
-			Cell cell1 = row1.createCell(9);
-			cell1.setCellValue("Blah");**/
-			
 			DataFormatter dataFormatter = new DataFormatter();
 			
 			Iterator<Row> it = sheet.iterator();

@@ -35,6 +35,11 @@ public class RawWriter {
 			cell1.setCellValue((String) course[1]);
 		}
 		
+        // Formatting column width
+        for(int i=0;i<2;i++) {
+        	rawSheet.autoSizeColumn(i);
+        }
+		
 		try {
 	       	FileOutputStream outputStream = new FileOutputStream(FILE_NAME2);
 	       	workbook.write(outputStream);
@@ -123,11 +128,11 @@ public class RawWriter {
         	Cell cell8 = row.createCell(8);
         	cell8.setCellValue((Integer) course.getNumGrades("D"));
         	Cell cell9 = row.createCell(9);
-        	cell9.setCellValue((Integer) course.getNumGrades("C"));
+        	cell9.setCellValue((Integer) (course.getNumGrades("C+") + course.getNumGrades("C") + course.getNumGrades("C-")));
         	Cell cell10 = row.createCell(10);
-        	cell10.setCellValue((Integer) course.getNumGrades("B"));
+        	cell10.setCellValue((Integer) (course.getNumGrades("B+") + course.getNumGrades("B") + course.getNumGrades("B-")));
         	Cell cell11 = row.createCell(11);
-        	cell11.setCellValue((Integer) course.getNumGrades("A"));
+        	cell11.setCellValue((Integer) (course.getNumGrades("A+") + course.getNumGrades("A") + course.getNumGrades("A-")));
         	Cell cell13 = row.createCell(13);							//rank
         	Cell cell14 = row.createCell(14);
         	Cell cell15 = row.createCell(15);

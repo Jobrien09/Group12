@@ -16,8 +16,6 @@ public class Course {
 	private int numFA;
 	private int numWI;
 	
-	//private int[] arrayGrades = new int[] {numAp,numA,numAm,numBp,numB,numBm,numCp,numC,numCm,numD,numF};
-	
 	public Course(String courseNum) {
 		this.courseNum = courseNum;
 	}
@@ -72,7 +70,7 @@ public class Course {
 			case "AUD":	numO++; break;					
 			case "CTN": numO++; break;
 			case "W": numO++; break;
-			default :	System.out.println("Grade not within range");
+			default : numO++;
 		}
 	}
 
@@ -86,7 +84,7 @@ public class Course {
 			case "AUD":	numO--; break;
 			case "CTN": numO--; break;
 			case "W": numO--; break;
-			default :	System.out.println("Grade not within range2");
+			default : numO--;
 		}
 	}
 
@@ -108,8 +106,7 @@ public class Course {
 			case "CTN": num = numO; break;
 			case "W": num = numO; break;
 			case "O": num = numO; break;
-			default :	System.out.println("Grade not within range3");
-						return -1;
+			default : num = numO;
 		}
 		return num;
 	}
@@ -118,7 +115,7 @@ public class Course {
 		switch(campus) {
 			case "SJ": numSJ++; break;
 			case "FR": numFR++; break;
-			default: System.out.println("The campus does not exist");
+			default: System.out.println("The campus is not UNB");
 		}
 	}
 	
@@ -126,7 +123,7 @@ public class Course {
 		switch(campus) {
 			case "SJ": numSJ--; break;
 			case "FR": numFR--; break;
-			default: System.out.println("The campus does not exist2");
+			default: System.out.println("The campus is not UNB 2");
 		}
 	}
 
@@ -135,7 +132,7 @@ public class Course {
 		switch(campus) {
 			case "SJ": num = numSJ; break;
 			case "FR": num = numFR; break;
-			default: System.out.println("The campus does not exist");
+			default: System.out.println("The campus is not UNB");
 					 return -1;
 		}
 		return num;
