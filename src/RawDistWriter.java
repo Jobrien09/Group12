@@ -9,9 +9,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class RawDistWriter extends XLSXWriter<Course>{
+	private List<Integer> schema;
 	
-	public RawDistWriter(String fileName, XSSFWorkbook workbook) {
+	public RawDistWriter(String fileName, XSSFWorkbook workbook, List<Integer> schema) {
 		super(fileName, workbook);
+		this.schema = schema;
 	}
 	
 	@Override
@@ -65,8 +67,7 @@ public class RawDistWriter extends XLSXWriter<Course>{
         	cell.setCellValue(topRowTypes5[i - count]);
         	cell.setCellStyle(style);
         }
-
-
+        
         int rowNum = 1;
         for (Course course : courseList) {
         	Row row = rawSheet.createRow(rowNum++);
@@ -74,6 +75,7 @@ public class RawDistWriter extends XLSXWriter<Course>{
         	Cell cell0 = row.createCell(0);
         	cell0.setCellValue((String) course.getName());
 
+        	course.setNumAchievement(schema);
         	
         	Cell cell1 = row.createCell(1);
         	cell1.setCellValue((Integer) course.getNumGrades("O")); //achievement

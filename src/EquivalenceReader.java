@@ -8,16 +8,19 @@ import java.io.FileNotFoundException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class EquivalenceReader{
+public class EquivalenceReader implements XLSXReader<String[]>{
 
-	private static String fileName;
+	private String fileName;
+	private List<String[]> rawList;
 	
-	public EquivalenceReader(String fileName) {
+	public EquivalenceReader(String fileName, List<String[]> rawList) {
 		this.fileName = fileName;
+		this.rawList = rawList;
 	}
 	
 	//reads Equivalence tab and change any course number that exists in the tab to master course number
-	public static List<Course> read(List<Course> courseList) {
+	@Override
+	public List<String[]> read() {
 		try {
 			FileInputStream excelFile = new FileInputStream(new File(fileName));
 			Workbook workbook = new XSSFWorkbook(excelFile);
@@ -37,7 +40,7 @@ public class EquivalenceReader{
 						firstRow++;
 						continue;
 					}
-					changeCourseNum(courseList, cellValue, masterCourseNum);			
+					changeCourseNum(rawList, cellValue, masterCourseNum);			
 				}
 			}
 			workbook.close();
@@ -46,16 +49,31 @@ public class EquivalenceReader{
         } catch (IOException e) {
             e.printStackTrace();
         }
-		return courseList;
+		return rawList;
 	}
 	
-	private static void changeCourseNum(List<Course> courseList, String courseNum, String masterCourseNum) {
-		for (Course course : courseList) {
-			String cNum = course.getName();
+	private void changeCourseNum(List<String[]> rawList, String courseNum, String masterCourseNum) {
+		for (String[] course : rawList) {
+			String cNum = course[0];
 			if (cNum.equals(courseNum)) {
+				if (!existsInRawList(rawList, masterCourseNum))
+					course[0] = masterCourseNum;
+				else 
+					rawList.remove(course);
 				
 				break;
 			}
 		}	
+	}
+	
+	private boolean existsInRawList(List<String[]> rawList, String masterCourseNum) {
+		boolean flag = false;
+		for (String[] course : rawList) {
+			if (course[0].equals(masterCourseNum)) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
 	}
 }

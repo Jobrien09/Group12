@@ -10,6 +10,11 @@ public class Area {
 	private int numD;
 	private int numF;
 	private int numO;
+	
+	private int exceeds;
+	private int meets;
+	private int marginal;
+	private int fails;
 
 	public Area(List<Course> list) {
 		this.list = list;
@@ -47,54 +52,47 @@ public class Area {
 			case "C-":	num = numCm; break;
 			case "D":	num = numD; break;
 			case "F":	num = numF; break;
-			case "AUD":	num = numO; break;
-			case "CTN": num = numO; break;
-			case "W": num = numO; break;
 			case "O": num = numO; break;
 			default : num = numO;
 		}
 		return num;
 	}
 	
+	public void setNumAchievement(List<Integer> schema) {
+		int iexceeds = schema.get(0);
+		int imeets = schema.get(1);
+		int imarginal = schema.get(2);
+		int[] arrayGrades = new int[] {numAp,numA,numAm,numBp,numB,numBm,numCp,numC,numCm,numD,numF};
+		
+		int i = 0;
+		while (i <= iexceeds) {
+			exceeds += arrayGrades[i];
+			i++;
+		}
+		while (i <= imeets) {
+			meets += arrayGrades[i];
+			i++;
+		}
+		while (i <= imarginal) {
+			marginal += arrayGrades[i];
+			i++;
+		}
+		while (i < arrayGrades.length) {
+			fails += arrayGrades[i];
+			i++;
+		}
+	}
+	
 	public int getNumAchievement(String level) {
 		int num = 0;
-		int i = 0;
-		int[] arrayGrades = new int[] {numAp,numA,numAm,numBp,numB,numBm,numCp,numC,numCm,numD,numF};
-		int exceeds = Schema.getExceeds();
-		int meets = Schema.getMeets();
-		int marginal = Schema.getMarginal();
-		
 		switch (level) {
-			case "Exceeds": while(i<=exceeds) {
-								num += arrayGrades[i];
-								i++;
-							} break;
-			
-			case "Meets": i = exceeds+1;
-						  while(i<=meets) {
-							  num += arrayGrades[i];
-							  i++;
-						  } break;
-			
-			case "Marginal": i = meets+1;
-							while(i<=marginal) {
-								num += arrayGrades[i];
-								i++;
-							} break;
-			
-			case "Fails": i = marginal+1;
-							 while(i<arrayGrades.length) {
-								 num += arrayGrades[i];
-								 i++;
-							 } break;
-			case "Other": num = numO; break;
+			case "Exceeds": num = exceeds; break;
+			case "Meets": num = meets; break;
+			case "Marginal": num = marginal; break;	
+			case "Fails": num = fails; break;
 			default: System.out.println("level not available");
-					 return -1;
+			 		 return -1;
 		}
 		return num;
-	}	
-	
-	public List<Course> getList(){
-		return list;
 	}
 }

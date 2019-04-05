@@ -6,13 +6,15 @@ import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class TranscriptReader {
+public class TranscriptReader implements TXTReader{
 	private String directoryPath;
 
 	private List<Course> courseList = new ArrayList<>();
 	private List<String[]> rawList = new ArrayList<>();
-	private List<String[]> transcript;	
+	private List<String[]> transcript;
 	
 //	public String getCohort() { //get cohort from the directory file name from directoryPath
 //		
@@ -38,7 +40,6 @@ public class TranscriptReader {
                     String courseLine;             
                     while ((courseLine = lineReader.readLine()) != null) {
                         if(!courseLine.equals("")) {
-                        	int totalCH = 0;
 			    			createLists(courseLine);
                         }      
 		    		}
@@ -47,7 +48,7 @@ public class TranscriptReader {
                     System.out.println(f.getName());
                     e.printStackTrace();
                     hasErrored = true;
-                }
+                }	
 				
                 finally {
                     if (lineReader != null) {
@@ -70,7 +71,7 @@ public class TranscriptReader {
 		String cNum = grade[0];
 		String cTitle = grade[1];
 		addToLists(cNum, cTitle);
-		addGradesToTranscript(grade);
+		addCourseToTranscript(grade);
 		findCourseToInc(grade);
 		lineScan.close();
 	}
@@ -108,11 +109,61 @@ public class TranscriptReader {
 		return grade;
 	}
 	
-	//returns raw list
+	//returns sorted raw list
 	public List<String[]> getRawList() {
+		Collections.sort(rawList, new Comparator<String[]>() {
+			public int compare (String[] x1, String[] x2) {
+				int n1 = x1[0].length();
+				int n2 = x2[0].length();
+				int min = Math.min(n1, n2);
+			
+				for (int i = 0; i < min; i++) {
+					int x1_ch = (int)x1[0].charAt(i);
+					int x2_ch = (int)x2[0].charAt(i);
+				
+					if (x1_ch > x2_ch)
+						return 1;
+					else if (x1_ch < x2_ch)
+						return -1;
+				}
+			
+				if (n1 > n2)
+					return 1;
+				else if (n1 < n2)
+					return -1;
+				return 0;	
+			}
+		});
 		return rawList;
 	}
 	
+	public List<Course> sortCourseList() {
+		Collections.sort(courseList, new Comparator<Course>() {
+			public int compare (Course c1, Course c2) {
+				int n1 = c1.getName().length();
+				int n2 = c2.getName().length();
+				int min = Math.min(n1, n2);
+			
+				for (int i = 0; i < min; i++) {
+					int x1_ch = (int)c1.getName().charAt(i);
+					int x2_ch = (int)c2.getName().charAt(i);
+				
+					if (x1_ch > x2_ch)
+						return 1;
+					else if (x1_ch < x2_ch)
+						return -1;
+				}
+			
+				if (n1 > n2)
+					return 1;
+				else if (n1 < n2)
+					return -1;
+				return 0;	
+			}
+		});
+		return courseList;
+	}
+		
 	//returns course list
 	public List<Course> getCourseList() {
 		return courseList;
@@ -138,23 +189,34 @@ public class TranscriptReader {
 		return status;
 	}
 	
-	//adds the course grade that was read from the transcript to Transcript list
-	private void addGradesToTranscript(String[] grade) {
-		takeCourseTwice(grade);
-		transcript.add(grade);
+	private void addCourseToTranscript(String[] grade) {
+		if (transcript.isEmpty())
+			transcript.add(grade);
+		else
+			takeSameCourse(grade);
 	}
-
 	//checks if the course was already taken once
-	private void takeCourseTwice(String[] grade) {
-		for (String[] cGrade : transcript) {
-			String cName = cGrade[0];
-			String cNum = grade[0];
-			if (cName.equals(cNum)) {
-				String letter = cGrade[2];
-				findCourseToDec(letter, grade);
-				break;
-			}
+	private void takeSameCourse(String[] grade) {
+		String[] cGrade = transcript.get(transcript.size() - 1);
+		String cName = cGrade[0];
+		String cNum = grade[0];
+		if (cName.equals(cNum)) {
+			String letter1 = cGrade[2];
+			String letter2 = grade[2];
+			String lowLetter = Course.findLowerGrade(letter1, letter2);
+			String[] lowGrade, highGrade;
+			if (lowLetter.equals(letter1)) {
+				lowGrade = cGrade;
+				transcript.remove(lowGrade);
+				highGrade = grade;
+				transcript.add(highGrade);
+			} else {
+				lowGrade = grade;
+			}				
+			findCourseToDec(lowGrade);
 		}
+		else
+			transcript.add(grade);
 	}
 	
 	//increments the course distribution
@@ -169,11 +231,11 @@ public class TranscriptReader {
 	}
 	
 	//decrements the course distribution
-	private void findCourseToDec(String letter, String[] grade) {
+	private void findCourseToDec(String[] grade) {
 		for (Course course : courseList) {
 			String cNum = grade[0];
 			if (course.getName().equals(cNum)) {
-				course.decrementCourse(letter, grade);
+				course.decrementCourse(grade);
 				break;
 			}
 		}

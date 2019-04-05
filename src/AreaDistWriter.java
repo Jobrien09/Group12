@@ -10,9 +10,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class AreaDistWriter extends XLSXWriter<Area>{
+	private List<Integer> schema;
 	
-	public AreaDistWriter(String fileName, XSSFWorkbook workbook) {
+	public AreaDistWriter(String fileName, XSSFWorkbook workbook, List<Integer> schema) {
 		super(fileName, workbook);
+		this.schema = schema;
 	}
 	
 	@Override
@@ -43,8 +45,10 @@ public class AreaDistWriter extends XLSXWriter<Area>{
         	cell.setCellValue(firstColumnTypes[i]);
         	cell.setCellStyle(style);
         	
+        	areaLists.get(i).setNumAchievement(schema);
+        	
             Cell cell1 = column.createCell(1);
-            cell1.setCellValue((Integer) areaLists.get(i).getNumAchievement("Other"));
+            cell1.setCellValue((Integer) areaLists.get(i).getNumGrades("O"));
             Cell cell2 = column.createCell(2);
             cell2.setCellValue((Integer) areaLists.get(i).getNumAchievement("Fails"));
             Cell cell3 = column.createCell(3);
