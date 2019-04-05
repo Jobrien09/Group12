@@ -148,7 +148,6 @@ public class AreaReader implements XLSXReader<Area>{
 	private void writeNotSpecified(Workbook workbook, Sheet sheet) {
 		int rowNum = 1;
 		int columnNum = 9;
-		System.out.println(notspecified.size());
 		for(Course course : notspecified) {
 			Row row = sheet.getRow(rowNum++);
 			if (row == null) {

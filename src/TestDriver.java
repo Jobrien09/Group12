@@ -19,8 +19,12 @@ public class TestDriver {
 		List<Course> courseList = tr.sortCourseList();
 		
 		//read equivalence tab and return updated raw list with equivalences
-		XLSXReader<String[]> er = new EquivalenceReader(infileName3, rawList);
+		XLSXReader<String[]> er = new RawEquivalenceReader(infileName3, rawList);
 		rawList = er.read();
+		
+		XLSXReader<Course> er2 = new CourseEquivalenceReader(infileName3, courseList);
+		courseList = er2.read();
+		courseList = tr.sortCourseList();
 		
 		//write raw list to excel
 		XLSXWriter<String[]> w1 = new RawListWriter(outfileName1, workbook1);
@@ -37,6 +41,7 @@ public class TestDriver {
 		XLSXReader<Area> ar = new AreaReader(infileName3, courseList);		
 		List<Area> areaLists = ar.read();
 		
+		//Write area distribution to area tab
 		XLSXWriter<Area> w3 = new AreaDistWriter(outfileName2, workbook2, schema);	
 		w3.writeWorkbook(areaLists);
 		w3.writeToExcel();			//close just once

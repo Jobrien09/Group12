@@ -2,7 +2,7 @@ package test;
 
 import java.util.List;
 
-public class Course{
+public class Course {
 	private String courseNum;
 
 	private int numA, numAm, numAp;	
@@ -17,7 +17,7 @@ public class Course{
 	private int marginal;
 	private int fails;
 	
-	private int freshman;				//low priority
+	private int freshman;
 	private int sophomore;
 	private int junior;
 	private int senior;
@@ -36,6 +36,10 @@ public class Course{
 
 	public String getName() {
 		return courseNum;
+	}
+	
+	public void setName(String cNum) {
+		courseNum = cNum;
 	}
 	
 	public void incrementCourse(String[] grade) {
@@ -81,6 +85,23 @@ public class Course{
 			case "D":	numD++; break;
 			case "F":	numF++; break;
 			default : numO++;
+		}
+	}
+	
+	public void incrementNumGrade (String grade, int num) {
+		switch (grade) {
+			case "A+": 	numAp += num; break;
+			case "A": 	numA += num; break;
+			case "A-":	numAm += num; break;
+			case "B+": 	numBp += num; break;
+			case "B": 	numB += num; break;
+			case "B-":	numBm += num; break;
+			case "C+": 	numCp += num; break;
+			case "C": 	numC += num; break;
+			case "C-":	numCm += num; break;
+			case "D":	numD += num; break;
+			case "F":	numF += num; break;
+			default : numO += num;
 		}
 	}
 
@@ -129,6 +150,14 @@ public class Course{
 		}
 	}
 	
+	public void incrementNumCampus(String campus, int num) {
+		switch(campus) {
+			case "SJ": numSJ+=num; break;
+			case "FR": numFR+=num; break;
+	
+		}
+	}
+	
 	private void decrementNumCampus(String campus) {
 		switch(campus) {
 			case "SJ": numSJ--; break;
@@ -155,6 +184,15 @@ public class Course{
 			case "FA": numFA++; break;
 			case "WI": numWI++; break;
 			default: System.out.println("The semester does not exist1");
+		}
+	}
+	
+	public void incrementNumSemester(String semester, int num) {
+		switch(semester) {
+			case "SP": numSP+=num; break;
+			case "SM": numSM+=num; break;
+			case "FA": numFA+=num; break;
+			case "WI": numWI+=num; break;
 		}
 	}
 	
@@ -203,6 +241,15 @@ public class Course{
 		while (i < arrayGrades.length) {
 			fails += arrayGrades[i];
 			i++;
+		}
+	}
+	
+	public void incrementNumAchievement(String level, int num) {
+		switch (level) {
+			case "Exceeds": exceeds += num; break;
+			case "Meets": meets += num; break;
+			case "Marginal": marginal += num; break;	
+			case "Fails": fails += num; break;
 		}
 	}
 	
@@ -271,5 +318,4 @@ public class Course{
 		}
 		return 0;
 	}
-  
 }
