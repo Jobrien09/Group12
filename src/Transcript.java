@@ -36,7 +36,13 @@ public class Transcript {
 	}
 	
 	public String getAreaGrade(String area) {
-		int numGrade = (int)getAvg(area)*100;
+		double gradeIn = getAvg(area)*100;
+		
+		if(gradeIn == -100) {
+			return "NaN";		// Returns NaN if transcript has no courses in said area
+		}
+		
+		int numGrade = (int)gradeIn;
 		String grade = "";
 		
 		
@@ -64,8 +70,9 @@ public class Transcript {
 		return grade;
 	}
 	
-	private double getAvg(String area) {
+	public double getAvg(String area) {
 		setArea();
+		int n = 0;
 		double numerator = 0.0;
 		double totalCH = 0.0;
 		List<Course> areaIn = null;
@@ -81,19 +88,22 @@ public class Transcript {
 		case "society": areaIn = society; break;
 		}
 		
-		System.out.println(areaIn.size());
-		
 		for(int i=0;i<areaIn.size();i++) {
 			for(int j=0;j<courses.size();j++) {
 				if(areaIn.get(i).getName().equals(courses.get(j).getName())) {
 					totalCH += courses.get(j).getCreditHours();
 					numerator += courses.get(j).getCreditHours() * grades.get(j);
+					n++;
 				}
 			}
 		}
 		
-		double avg = numerator / totalCH;
+		// Returns -1 if transcript has no courses in said area
+		if(n==0) {
+			return -1.0;
+		}
 		
+		double avg = numerator / totalCH;
 		return avg;
 	}
 	

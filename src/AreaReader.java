@@ -122,7 +122,7 @@ public class AreaReader{
 		switch (areaName.toLowerCase()) {
 			case "math": return math;
 			case "science": return science;
-			case "fundamentals": return fundamental;
+			case "fundamental": return fundamental;
 			case "specialized": return specialized;
 			case "terminal": return terminal;
 			case "core": return core;

@@ -15,8 +15,7 @@ public class TranscriptReader{
 	private List<Course> courseList = new ArrayList<>();
 	private List<String[]> rawList = new ArrayList<>();
 	private List<String[]> transcript;
-	private List<Transcript> transcripts = new ArrayList<>();
-	private Transcript trans;
+	private static List<Transcript> transcripts = new ArrayList<>();
 	
 	public TranscriptReader(String dirPath) {
 		this.directoryPath = dirPath;
@@ -26,20 +25,24 @@ public class TranscriptReader{
 	public List<Transcript> read() {
 		File dir = new File(directoryPath);
 		File[] files = dir.listFiles();
-
+		
+		int i = -1;
+		
 		for (File f : files) {
+			
+			i++;
+			transcripts.add(new Transcript());
+			
 			if (f.isFile()) {
 				boolean hasErrored = false;
 				BufferedReader lineReader = null;
 				transcript = new ArrayList<>();
-				trans = new Transcript();
-				transcripts.add(trans);
 				try {
 					lineReader = new BufferedReader(new FileReader(f));
                     String courseLine;             
                     while ((courseLine = lineReader.readLine()) != null) {
                         if(!courseLine.equals("")) {
-			    			createLists(courseLine);
+			    			createLists(courseLine, transcripts.get(i), i);
                         }      
 		    		}
 				}
@@ -65,7 +68,7 @@ public class TranscriptReader{
 	}
 	
 	//creates lists
-	private void createLists(String courseLine) {
+	private void createLists(String courseLine, Transcript transcript, int i) {
 		Scanner lineScan = new Scanner(courseLine);		
 		String[] grade = readCourse(courseLine);
 		String cNum = grade[0];
@@ -74,7 +77,7 @@ public class TranscriptReader{
 		String creditHours = grade[5];
 		addToLists(cNum, cTitle, creditHours, letterGrade);
 		addCourseToTranscript(grade);
-		findCourseToInc(grade);
+		findCourseToInc(grade, transcript);
 		lineScan.close();
 	}
 	
@@ -177,7 +180,6 @@ public class TranscriptReader{
 			Course course = new Course(cNum);
 			course.setCreditHours(creditHours);
 			courseList.add(course);
-//			trans.addCourse(course, grade);
 			rawList.add(new String[] {cNum, cTitle});
 		}
 	}
@@ -225,11 +227,13 @@ public class TranscriptReader{
 	}
 	
 	//increments the course distribution
-	private void findCourseToInc(String[] grade) {
+	private void findCourseToInc(String[] grade, Transcript transcript) {
 		for (Course course : courseList) {
 			String cNum = grade[0];
+			String letter = grade[2];
 			if (course.getName().equals(cNum)) {
 				course.incrementCourse(grade);
+				transcript.addCourse(course, letter);
 				break;
 			}
 		}

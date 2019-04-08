@@ -7,7 +7,7 @@ public class TestDriver {
 		XSSFWorkbook workbook1 = new XSSFWorkbook();
 		XSSFWorkbook workbook2 = new XSSFWorkbook();
 		
-		String dirPath = "/home1/ugrads/dbest/cohort_1";
+		String dirPath = "C:\\Users\\Deon\\Documents\\transcripts all";
 		String outfileName1 = "rawList.xlsx";
 		String outfileName2 = "results_EE2015.xlsx";
 		String infileName3 = "config.xlsx";
