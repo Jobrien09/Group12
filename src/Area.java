@@ -15,6 +15,8 @@ public class Area {
 	private int meets;
 	private int marginal;
 	private int fails;
+	
+	private double totalCH;
 
 	public Area(List<Course> list) {
 		this.list = list;
@@ -35,6 +37,7 @@ public class Area {
 			numD += course.getNumGrades("D");
 			numF += course.getNumGrades("F");
 			numO += course.getNumGrades("O");
+			totalCH += course.getCreditHours();
 		}
 	}
 	

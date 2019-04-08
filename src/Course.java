@@ -30,6 +30,8 @@ public class Course {
 	private int numFA;
 	private int numWI;
 	
+	private double creditHours;
+	
 	public Course(String courseNum) {
 		this.courseNum = courseNum;
 	}
@@ -318,4 +320,13 @@ public class Course {
 		}
 		return 0;
 	}
+	
+	public void setCreditHours(String creditHoursIn) {
+		creditHours = Double.parseDouble(creditHoursIn);
+	}
+	
+	public Double getCreditHours() {
+		return creditHours;
+	}
+	
 }

@@ -9,28 +9,30 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class TranscriptReader implements TXTReader{
+public class TranscriptReader{
 	private String directoryPath;
 
 	private List<Course> courseList = new ArrayList<>();
 	private List<String[]> rawList = new ArrayList<>();
 	private List<String[]> transcript;
-	
-//	public String getCohort() { //get cohort from the directory file name from directoryPath
-//		
-//		return cohort;				ex: EE2014?
-//	}
+	private static List<Transcript> transcripts = new ArrayList<>();
 	
 	public TranscriptReader(String dirPath) {
 		this.directoryPath = dirPath;
 	}
 	
 	//reads transcripts and creates Course, Raw, and Transcript list
-	public void read() {
+	public List<Transcript> read() {
 		File dir = new File(directoryPath);
 		File[] files = dir.listFiles();
-
+		
+		int i = -1;
+		
 		for (File f : files) {
+			
+			i++;
+			transcripts.add(new Transcript());
+			
 			if (f.isFile()) {
 				boolean hasErrored = false;
 				BufferedReader lineReader = null;
@@ -40,7 +42,7 @@ public class TranscriptReader implements TXTReader{
                     String courseLine;             
                     while ((courseLine = lineReader.readLine()) != null) {
                         if(!courseLine.equals("")) {
-			    			createLists(courseLine);
+			    			createLists(courseLine, transcripts.get(i), i);
                         }      
 		    		}
 				}
@@ -61,18 +63,21 @@ public class TranscriptReader implements TXTReader{
                     }
                 }
 			}
-		}
+		}	
+		return transcripts;
 	}
 	
 	//creates lists
-	private void createLists(String courseLine) {
+	private void createLists(String courseLine, Transcript transcript, int i) {
 		Scanner lineScan = new Scanner(courseLine);		
 		String[] grade = readCourse(courseLine);
 		String cNum = grade[0];
 		String cTitle = grade[1];
-		addToLists(cNum, cTitle);
+		String letterGrade = grade[2];
+		String creditHours = grade[5];
+		addToLists(cNum, cTitle, creditHours, letterGrade);
 		addCourseToTranscript(grade);
-		findCourseToInc(grade);
+		findCourseToInc(grade, transcript);
 		lineScan.close();
 	}
 	
@@ -170,9 +175,11 @@ public class TranscriptReader implements TXTReader{
 	}
 	
 	//adds the course into Course list and Raw list
-	private void addToLists(String cNum, String cTitle) {
+	private void addToLists(String cNum, String cTitle, String creditHours, String grade) {
 		if (!existsInCourseList(cNum)) {
-			courseList.add(new Course(cNum));
+			Course course = new Course(cNum);
+			course.setCreditHours(creditHours);
+			courseList.add(course);
 			rawList.add(new String[] {cNum, cTitle});
 		}
 	}
@@ -220,11 +227,13 @@ public class TranscriptReader implements TXTReader{
 	}
 	
 	//increments the course distribution
-	private void findCourseToInc(String[] grade) {
+	private void findCourseToInc(String[] grade, Transcript transcript) {
 		for (Course course : courseList) {
 			String cNum = grade[0];
+			String letter = grade[2];
 			if (course.getName().equals(cNum)) {
 				course.incrementCourse(grade);
+				transcript.addCourse(course, letter);
 				break;
 			}
 		}

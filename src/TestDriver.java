@@ -7,14 +7,14 @@ public class TestDriver {
 		XSSFWorkbook workbook1 = new XSSFWorkbook();
 		XSSFWorkbook workbook2 = new XSSFWorkbook();
 		
-		String dirPath = "/home1/ugrads/dbest/cohort_1";
+		String dirPath = "C:\\Users\\Deon\\Documents\\transcripts all";
 		String outfileName1 = "rawList.xlsx";
 		String outfileName2 = "results_EE2015.xlsx";
 		String infileName3 = "config.xlsx";
 		
 		//read transcripts and return 2 lists
 		TranscriptReader tr = new TranscriptReader(dirPath);
-		tr.read();		
+		List<Transcript> transcripts = tr.read();		
 		List<String[]> rawList = tr.getRawList();
 		List<Course> courseList = tr.sortCourseList();
 		
@@ -33,17 +33,18 @@ public class TestDriver {
 		
 		//write raw distribution to the workbook
 		XLSXReader<Integer> sr = new SchemaReader(infileName3);
-		List<Integer> schema = sr.read();
-		XLSXWriter<Course> w2 = new RawDistWriter(outfileName2, workbook2, schema);
-		w2.writeWorkbook(courseList);		
+		List<Integer> schema = sr.read();	
 		
 		//read areas tab and return calculated area distribution list
-		XLSXReader<Area> ar = new AreaReader(infileName3, courseList);		
+		AreaReader ar = new AreaReader(infileName3, courseList);		
 		List<Area> areaLists = ar.read();
 		
+		XLSXWriter<Course> w2 = new RawDistWriter(outfileName2, workbook2, schema);
+		w2.writeWorkbook(courseList);	
+		
 		//Write area distribution to area tab
-		XLSXWriter<Area> w3 = new AreaDistWriter(outfileName2, workbook2, schema);	
-		w3.writeWorkbook(areaLists);
+		AreaDistWriter w3 = new AreaDistWriter(outfileName2, workbook2, schema);	
+		w3.writeWorkbook(transcripts);
 		w3.writeToExcel();			//close just once
 	}
 }

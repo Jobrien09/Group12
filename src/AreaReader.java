@@ -15,17 +15,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
-public class AreaReader implements XLSXReader<Area>{
-	private List<Course> math = new ArrayList<>();
-	private List<Course> science = new ArrayList<>();
-	private List<Course> fundamental = new ArrayList<>();
-	private List<Course> specialized = new ArrayList<>();
-	private List<Course> terminal = new ArrayList<>();
-	private List<Course> core = new ArrayList<>();
-	private List<Course> cse = new ArrayList<>();
-	private List<Course> society = new ArrayList<>();
-	private List<Course> specified = new ArrayList<>();
-	private List<Course> notspecified = new ArrayList<>();
+public class AreaReader{
+	private static List<Course> math = new ArrayList<>();
+	private static List<Course> science = new ArrayList<>();
+	private static List<Course> fundamental = new ArrayList<>();
+	private static List<Course> specialized = new ArrayList<>();
+	private static List<Course> terminal = new ArrayList<>();
+	private static List<Course> core = new ArrayList<>();
+	private static List<Course> cse = new ArrayList<>();
+	private static List<Course> society = new ArrayList<>();
+	private static List<Course> specified = new ArrayList<>();
+	private static List<Course> notspecified = new ArrayList<>();
 	
 	private List<Course> courseList;
 	
@@ -35,7 +35,6 @@ public class AreaReader implements XLSXReader<Area>{
 		this.courseList = courseList;
 	}
 	
-	@Override
 	public List<Area> read() {
 		try {
 			FileInputStream excelFile = new FileInputStream(new File(fileName));
@@ -119,6 +118,20 @@ public class AreaReader implements XLSXReader<Area>{
 		}
 	}
 	
+	public static List<Course> getArea(String areaName) {
+		switch (areaName.toLowerCase()) {
+			case "math": return math;
+			case "science": return science;
+			case "fundamental": return fundamental;
+			case "specialized": return specialized;
+			case "terminal": return terminal;
+			case "core": return core;
+			case "cse": return cse;
+			case "society": return society;
+		}
+		return notspecified;
+	}
+	
 	//calculates the area distribution
 	private List<Area> calculateAreaLists() {
 		// Creating all areas
@@ -155,15 +168,6 @@ public class AreaReader implements XLSXReader<Area>{
 			}
 			Cell cell = row.createCell(columnNum);
 			cell.setCellValue(course.getName());
-//			if(rowNum<200) {
-//				Row row = sheet.getRow(rowNum++);
-//				Cell cell = row.createCell(columnNum);
-//				cell.setCellValue(course.getName());
-//			} else {
-//				Row row = sheet.createRow(rowNum++);
-//				Cell cell = row.createCell(columnNum);
-//				cell.setCellValue(course.getName());
-//			}
 		}
 	}
 }
