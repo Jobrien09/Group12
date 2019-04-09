@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class TranscriptReader{
+public class TranscriptReader implements TXTReader<Transcript>{
 	private String directoryPath;
 
 	private List<Course> courseList = new ArrayList<>();

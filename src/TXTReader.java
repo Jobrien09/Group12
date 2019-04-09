@@ -1,6 +1,6 @@
 package test;
 
-public interface TXTReader extends iReader{
-	public void read();
+public interface TXTReader<T> extends iReader{
+	public List<T> read();
 		
 }
